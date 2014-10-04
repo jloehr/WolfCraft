@@ -6,3 +6,12 @@ commands:
   setup:
     description: Sets up the server for WolfCraft; enabling the scoreboards etc.
     usage: /<command>
+  start:
+    description: Starts the round of WolfCraft
+    usage: /<command>
+  resume:
+    description: Starts the round of WolfCraft with the issuing player as werewolf
+    usage: /<command>
+  whatami:
+    description: Shows you what role you have
+    usage: /<command>

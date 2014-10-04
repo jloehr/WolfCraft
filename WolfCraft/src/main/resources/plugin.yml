@@ -1,3 +1,8 @@
 name: WolfCraft
 main: io.github.jloehr.wolfcraft.WolfCraft
-version: 0.0.1
+version: ${version}
+
+commands:
+  setup:
+    description: Sets up the server for WolfCraft; enabling the scoreboards etc.
+    usage: /<command>

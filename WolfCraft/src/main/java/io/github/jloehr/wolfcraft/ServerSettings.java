@@ -8,14 +8,19 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-public class SetupCommandExecutor implements CommandExecutor {
+public class ServerSettings implements CommandExecutor {
 	
 	@SuppressWarnings("unused")
 	private final WolfCraft Plugin;
 	
-	public SetupCommandExecutor(WolfCraft Plugin)
+	public ServerSettings(WolfCraft Plugin)
 	{
 		this.Plugin = Plugin;
+	}
+	
+	public void Setup()
+	{
+		SetupScoreboards();
 	}
 	
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2,

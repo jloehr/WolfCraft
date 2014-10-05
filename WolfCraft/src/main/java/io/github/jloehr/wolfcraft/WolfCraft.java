@@ -11,13 +11,9 @@ public final class WolfCraft extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		this.getCommand("Setup").setExecutor(ServerSettings);
-		this.getCommand("start").setExecutor(Game);
-		this.getCommand("resume").setExecutor(Game);
-		this.getCommand("whatami").setExecutor(Game);
-		
-		getServer().getPluginManager().registerEvents(Game, this);
 		
 		ServerSettings.Setup();
+		Game.onEnable();
 	}
 
 	@Override

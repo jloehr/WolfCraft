@@ -14,18 +14,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 public class WerewolfGame  implements CommandExecutor, Listener {
 
-	@SuppressWarnings("unused")
 	private final WolfCraft Plugin;
+	private GhostFilter GhostFilter = new GhostFilter(this);
 	private List<Player> AlivePlayers = new ArrayList<Player>();
 	private Player Werewolf = null;
 	
 	public WerewolfGame(WolfCraft Plugin)
 	{
 		this.Plugin = Plugin;
+	}
+	
+	public void onEnable()
+	{
+		Plugin.getCommand("start").setExecutor(this);
+		Plugin.getCommand("resume").setExecutor(this);
+		Plugin.getCommand("whatami").setExecutor(this);
+		Plugin.getCommand("ghost").setExecutor(this);
+		Plugin.getCommand("unghost").setExecutor(this);
+		
+		Plugin.getServer().getPluginManager().registerEvents(this, Plugin);
+		Plugin.getServer().getPluginManager().registerEvents(GhostFilter, Plugin);
 	}
 
 	public boolean onCommand(CommandSender Sender, Command Cmd, String arg2,
@@ -41,6 +52,22 @@ public class WerewolfGame  implements CommandExecutor, Listener {
 		if(Cmd.getName().equalsIgnoreCase("whatami"))
 		{
 			return ProcessWhatAmICommand(Sender);
+		} 	
+		if(Cmd.getName().equalsIgnoreCase("ghost"))
+		{
+			if(Sender instanceof Player)
+			{
+				GhostFilter.MakeGhost((Player)Sender);
+				return true;
+			}
+		} 	
+		if(Cmd.getName().equalsIgnoreCase("unghost"))
+		{
+			if(Sender instanceof Player)
+			{
+				GhostFilter.Unghost((Player)Sender);
+				return true;
+			}
 		} 	
 		
 		return false;
@@ -130,21 +157,11 @@ public class WerewolfGame  implements CommandExecutor, Listener {
 			{
 				//Hide DeathMessage
 				Event.setDeathMessage("");
-				MakeGhost(Killed);
+				GhostFilter.MakeGhost(Killed);
 			}
 		}
 	}
 
-	@EventHandler
-	public void OnPlayerJoin(PlayerJoinEvent Event)
-	{
-		if(HasStarted() && (!AlivePlayers.contains(Event.getPlayer())))
-		{
-			//Make Ghost
-			MakeGhost(Event.getPlayer());
-		}
-	}
-	
 	protected void StartGame(Player Werewolf)
 	{
 		AlivePlayers.addAll(Arrays.asList(Bukkit.getServer().getOnlinePlayers()));
@@ -176,7 +193,7 @@ public class WerewolfGame  implements CommandExecutor, Listener {
 		AlivePlayers.clear();
 		Werewolf = null;
 		
-		UnghostAll();
+		GhostFilter.UnghostAll();
 	}
 	
 	protected Player GetRandomPlayer()
@@ -185,27 +202,19 @@ public class WerewolfGame  implements CommandExecutor, Listener {
 		return AlivePlayers.get(RandomIndex);
 	}
 	
-	protected boolean HasStarted()
+	public boolean HasStarted()
 	{
 		return (Werewolf != null);
 	}
 	
-	protected void MakeGhost(Player Player)
+	public boolean IsAlive(Player Player)
 	{
-		
-	}
-	
-	protected void UnghostAll()
-	{
-		for(Player tmp : Bukkit.getServer().getOnlinePlayers())
+		if(!HasStarted())
 		{
-			Unghost(tmp);
+			return true;
 		}
-	}
-	
-	protected void Unghost(Player Player)
-	{
 		
+		return AlivePlayers.contains(Player);
 	}
 	
 	private void NotifyAll(String Message)

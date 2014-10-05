@@ -15,3 +15,9 @@ commands:
   whatami:
     description: Shows you what role you have
     usage: /<command>
+  ghost:
+    description: Woho
+    usage: /<command>
+  unghost:
+    description: No wuhu
+    usage: /<command>

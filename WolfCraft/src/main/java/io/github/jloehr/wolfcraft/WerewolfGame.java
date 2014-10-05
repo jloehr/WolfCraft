@@ -1,5 +1,6 @@
 package io.github.jloehr.wolfcraft;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -19,7 +20,7 @@ public class WerewolfGame  implements CommandExecutor, Listener {
 
 	@SuppressWarnings("unused")
 	private final WolfCraft Plugin;
-	private List<Player> AlivePlayers = null;
+	private List<Player> AlivePlayers = new ArrayList<Player>();
 	private Player Werewolf = null;
 	
 	public WerewolfGame(WolfCraft Plugin)
@@ -146,7 +147,7 @@ public class WerewolfGame  implements CommandExecutor, Listener {
 	
 	protected void StartGame(Player Werewolf)
 	{
-		AlivePlayers = Arrays.asList(Bukkit.getServer().getOnlinePlayers());
+		AlivePlayers.addAll(Arrays.asList(Bukkit.getServer().getOnlinePlayers()));
 		
 		if(Werewolf == null)
 		{
